@@ -53,7 +53,8 @@ public struct YearMonth: Equatable, Hashable {
     public static var current: YearMonth {
         get {
             let today = Date()
-            return YearMonth(year: Calendar.current.component(.year, from: today), month: Calendar.current.component(.month, from: today))
+            let calendar = Calendar.current
+            return YearMonth(year: calendar.component(.year, from: today), month: calendar.component(.month, from: today))
         }
     }
     
@@ -75,14 +76,14 @@ public struct YearMonth: Equatable, Hashable {
     }
     
     public func addMonth(value: Int) -> YearMonth {
-        let gregorianCalendar = NSCalendar(calendarIdentifier: .gregorian)!
+        let calendar = Calendar.current
         let toDate = self.toDateComponents()
 
         var components = DateComponents()
         components.month = value
 
-        let addedDate = Calendar.current.date(byAdding: components, to: gregorianCalendar.date(from: toDate)!)!
-        let ret = YearMonth(year: Calendar.current.component(.year, from: addedDate), month: Calendar.current.component(.month, from: addedDate))
+        let addedDate = calendar.date(byAdding: components, to: calendar.date(from: toDate)!)!
+        let ret = YearMonth(year: calendar.component(.year, from: addedDate), month: calendar.component(.month, from: addedDate))
         return ret
     }
     
@@ -113,19 +114,19 @@ public struct YearMonth: Equatable, Hashable {
     }
     
     internal func cellToDate(_ cellIndex: Int, startWithMonday: Bool) -> YearMonthDay {
-        let gregorianCalendar = NSCalendar(calendarIdentifier: .gregorian)!
+        let calendar = Calendar.current
         var toDateComponent = DateComponents()
         toDateComponent.year = self.year
         toDateComponent.month = self.month
         toDateComponent.day = 1
-        let toDate = gregorianCalendar.date(from: toDateComponent)!
-        let weekday = Calendar.current.component(.weekday, from: toDate) // 1Sun, 2Mon, 3Tue, 4Wed, 5Thu, 6Fri, 7Sat
+        let toDate = calendar.date(from: toDateComponent)!
+        let weekday = calendar.component(.weekday, from: toDate)
         var components = DateComponents()
         components.day = cellIndex - weekday + (!startWithMonday ? 1 : weekday == 1 ? (-5) : 2)
-        let addedDate = Calendar.current.date(byAdding: components, to: toDate)!
-        let year = Calendar.current.component(.year, from: addedDate)
-        let month = Calendar.current.component(.month, from: addedDate)
-        let day = Calendar.current.component(.day, from: addedDate)
+        let addedDate = calendar.date(byAdding: components, to: toDate)!
+        let year = calendar.component(.year, from: addedDate)
+        let month = calendar.component(.month, from: addedDate)
+        let day = calendar.component(.day, from: addedDate)
         let isFocusYaerMonth = year == self.year && month == self.month
         let ret = YearMonthDay(year: year, month: month, day: day, isFocusYearMonth: isFocusYaerMonth)
         return ret
@@ -155,10 +156,11 @@ public struct YearMonthDay: Equatable, Hashable {
     public static var current: YearMonthDay {
         get {
             let today = Date()
+            let calendar = Calendar.current
             return YearMonthDay(
-                year: Calendar.current.component(.year, from: today),
-                month: Calendar.current.component(.month, from: today),
-                day: Calendar.current.component(.day, from: today)
+                year: calendar.component(.year, from: today),
+                month: calendar.component(.month, from: today),
+                day: calendar.component(.day, from: today)
             )
         }
     }
@@ -181,8 +183,8 @@ public struct YearMonthDay: Equatable, Hashable {
     }
     
     public var date: Date? {
-        let gregorianCalendar = NSCalendar(calendarIdentifier: .gregorian)!
-        return gregorianCalendar.date(from: self.toDateComponents())
+        let calendar = Calendar.current
+        return calendar.date(from: self.toDateComponents())
     }
     
     public func toDateComponents() -> DateComponents {
@@ -194,17 +196,17 @@ public struct YearMonthDay: Equatable, Hashable {
     }
     
     public func addDay(value: Int) -> YearMonthDay {
-        let gregorianCalendar = NSCalendar(calendarIdentifier: .gregorian)!
+        let calendar = Calendar.current
         let toDate = self.toDateComponents()
 
         var components = DateComponents()
         components.day = value
 
-        let addedDate = Calendar.current.date(byAdding: components, to: gregorianCalendar.date(from: toDate)!)!
+        let addedDate = calendar.date(byAdding: components, to: calendar.date(from: toDate)!)!
         let ret = YearMonthDay(
-            year: Calendar.current.component(.year, from: addedDate),
-            month: Calendar.current.component(.month, from: addedDate),
-            day: Calendar.current.component(.day, from: addedDate)
+            year: calendar.component(.year, from: addedDate),
+            month: calendar.component(.month, from: addedDate),
+            day: calendar.component(.day, from: addedDate)
         )
         return ret
     }
