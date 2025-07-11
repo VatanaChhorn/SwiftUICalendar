@@ -39,6 +39,63 @@ import SwiftUICalendar
 -   Full custom calendar cell
 -   Pager lock
 -   Starting the week with Sunday or Monday
+-   **Global calendar configuration** - Support for different calendar types (Gregorian, Islamic, Hebrew, etc.)
+
+## Calendar Configuration
+
+SwiftUICalendar allows you to configure a global calendar that will be used throughout the library. This is particularly useful when you need to ensure your app uses a specific calendar type (like Gregorian) regardless of the user's system settings.
+
+### Setting up Global Calendar
+
+Configure the calendar once in your app, and it will be used across all SwiftUICalendar instances:
+
+#### In SwiftUI App:
+```swift
+@main
+struct MyApp: App {
+    init() {
+        // Configure calendar before any views are created
+        CalendarConfig.shared.setCalendar(Calendar(identifier: .gregorian))
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}
+```
+
+#### In UIKit AppDelegate:
+```swift
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    // Force library to use Gregorian calendar
+    CalendarConfig.shared.setCalendar(Calendar(identifier: .gregorian))
+    return true
+}
+```
+
+### Available Calendar Types:
+- `.gregorian` - Gregorian calendar (most common)
+- `.islamic` - Islamic calendar
+- `.hebrew` - Hebrew calendar  
+- `.chinese` - Chinese calendar
+- `.japanese` - Japanese calendar
+- And more...
+
+### Runtime Configuration:
+```swift
+// Change calendar at runtime
+CalendarConfig.shared.setCalendar(Calendar(identifier: .islamic))
+
+// Reset to system default
+CalendarConfig.shared.resetToDefault()
+
+// Get current configured calendar
+let currentCalendar = CalendarConfig.shared.calendar
+```
+
+> **Note**: Calendar configuration applies globally to all SwiftUICalendar instances in your app. Changes take effect immediately.
 
 ## Example
 

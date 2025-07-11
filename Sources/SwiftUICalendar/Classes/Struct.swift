@@ -53,7 +53,7 @@ public struct YearMonth: Equatable, Hashable {
     public static var current: YearMonth {
         get {
             let today = Date()
-            let calendar = Calendar.current
+            let calendar = CalendarConfig.shared.calendar
             return YearMonth(year: calendar.component(.year, from: today), month: calendar.component(.month, from: today))
         }
     }
@@ -71,12 +71,12 @@ public struct YearMonth: Equatable, Hashable {
             components.second = 0
             let formatter = DateFormatter()
             formatter.dateFormat = "MMM"
-            return formatter.string(from: Calendar.current.date(from: components)!)
+            return formatter.string(from: CalendarConfig.shared.calendar.date(from: components)!)
         }
     }
     
     public func addMonth(value: Int) -> YearMonth {
-        let calendar = Calendar.current
+        let calendar = CalendarConfig.shared.calendar
         let toDate = self.toDateComponents()
 
         var components = DateComponents()
@@ -98,7 +98,7 @@ public struct YearMonth: Equatable, Hashable {
         new.hour = 0
         new.minute = 0
         new.second = 0
-        return Calendar.current.dateComponents([.month], from: Calendar.current.date(from: origin)!, to: Calendar.current.date(from: new)!).month!
+        return CalendarConfig.shared.calendar.dateComponents([.month], from: CalendarConfig.shared.calendar.date(from: origin)!, to: CalendarConfig.shared.calendar.date(from: new)!).month!
     }
     
     public func toDateComponents() -> DateComponents {
@@ -114,7 +114,7 @@ public struct YearMonth: Equatable, Hashable {
     }
     
     internal func cellToDate(_ cellIndex: Int, startWithMonday: Bool) -> YearMonthDay {
-        let calendar = Calendar.current
+        let calendar = CalendarConfig.shared.calendar
         var toDateComponent = DateComponents()
         toDateComponent.year = self.year
         toDateComponent.month = self.month
@@ -156,7 +156,7 @@ public struct YearMonthDay: Equatable, Hashable {
     public static var current: YearMonthDay {
         get {
             let today = Date()
-            let calendar = Calendar.current
+            let calendar = CalendarConfig.shared.calendar
             return YearMonthDay(
                 year: calendar.component(.year, from: today),
                 month: calendar.component(.month, from: today),
@@ -171,19 +171,20 @@ public struct YearMonthDay: Equatable, Hashable {
     
     public var isToday: Bool {
         let today = Date()
-        let year = Calendar.current.component(.year, from: today)
-        let month = Calendar.current.component(.month, from: today)
-        let day = Calendar.current.component(.day, from: today)
+        let calendar = CalendarConfig.shared.calendar
+        let year = calendar.component(.year, from: today)
+        let month = calendar.component(.month, from: today)
+        let day = calendar.component(.day, from: today)
         return self.year == year && self.month == month && self.day == day
     }
     
     public var dayOfWeek: Week {
-        let weekday = Calendar.current.component(.weekday, from: self.date!)
+        let weekday = CalendarConfig.shared.calendar.component(.weekday, from: self.date!)
         return Week.allCases[weekday - 1]
     }
     
     public var date: Date? {
-        let calendar = Calendar.current
+        let calendar = CalendarConfig.shared.calendar
         return calendar.date(from: self.toDateComponents())
     }
     
@@ -196,7 +197,7 @@ public struct YearMonthDay: Equatable, Hashable {
     }
     
     public func addDay(value: Int) -> YearMonthDay {
-        let calendar = Calendar.current
+        let calendar = CalendarConfig.shared.calendar
         let toDate = self.toDateComponents()
 
         var components = DateComponents()
@@ -220,7 +221,7 @@ public struct YearMonthDay: Equatable, Hashable {
         new.hour = 0
         new.minute = 0
         new.second = 0
-        return Calendar.current.dateComponents([.day], from: Calendar.current.date(from: origin)!, to: Calendar.current.date(from: new)!).month!
+        return CalendarConfig.shared.calendar.dateComponents([.day], from: CalendarConfig.shared.calendar.date(from: origin)!, to: CalendarConfig.shared.calendar.date(from: new)!).month!
     }
     
     public func hash(into hasher: inout Hasher) {
